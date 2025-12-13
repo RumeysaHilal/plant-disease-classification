@@ -5,24 +5,22 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-UI-red?style=for-the-badge&logo=streamlit&logoColor=white)
 ![Deep Learning](https://img.shields.io/badge/Deep%20Learning-MobileNetV2-green?style=for-the-badge)
 
-A robust, web-based end-to-end computer vision application designed to identify plant diseases from leaf images. Built using **Transfer Learning with MobileNetV2**, this project addresses real-world deployment challenges such as image orientation, aspect ratio distortion, and background noise.
+A robust, web-based end-to-end computer vision application designed to identify plant diseases from leaf images. Built using **Transfer Learning with MobileNetV2**, this project addresses real-world deployment challenges such as image orientation and background noise.
 
 ---
 
 ## 📖 Table of Contents
-- [Project Overview](#-project-overview)
-- [Key Features & Innovations](#-key-features--innovations)
-- [System Architecture](#-system-architecture)
-- [Tech Stack](#-tech-stack)
-- [Installation & Setup](#-installation--setup)
-- [Usage Guide](#-usage-guide)
-- [Model Details](#-model-details)
-- [Challenges & Solutions](#-challenges--solutions)
-- [Contact](#-contact)
+- [Project Overview](#project-overview-)
+- [Key Features](#key-features-)
+- [System Architecture](#system-architecture-)
+- [Tech Stack](#tech-stack-)
+- [Installation & Setup](#installation--setup-)
+- [Usage Guide](#usage-guide-)
+- [Model Details](#model-details-)
 
 ---
 
-## 🔍 Project Overview
+## Project Overview 🔍
 
 Early detection of plant diseases is a critical factor in agricultural productivity and food security. Manual inspection is often slow, error-prone, and requires expert knowledge. 
 
@@ -30,31 +28,29 @@ This project automates the diagnosis process using Deep Learning. By leveraging 
 
 ---
 
-## 🌟 Key Features & Innovations
+## Key Features 🌟
 
 Unlike standard "Hello World" classification projects, this system includes **production-grade logic** to handle messy, real-world data:
 
-### 1. 🔄 Smart Rotation Invariance (TTA - Test Time Augmentation)
+### 1. Smart Rotation Invariance (TTA) 🔄
 Convolutional Neural Networks (CNNs) are not naturally rotation-invariant. A leaf photographed upside down might be misclassified.
-* **The Solution:** The system acts as an ensemble at inference time. It generates 4 variations of the uploaded image (**0°, 90°, 180°, 270°**), predicts on all of them, and selects the result with the highest confidence score.
+* **The Logic:** The system acts as an ensemble at inference time. It generates 4 variations of the uploaded image (**0°, 90°, 180°, 270°**), predicts on all of them, and selects the result with the highest confidence score.
 
-### 2. ⚡ Adaptive Aspect Ratio Optimization
+### 2. Adaptive Aspect Ratio Optimization ⚡
 To optimize computational resources and improve accuracy:
 * **Landscape Images:** Detected automatically via `width > height`. The system intelligently restricts the search space to **90° and 270°** rotations to correct the orientation before resizing.
 * **Portrait Images:** The system scans all 4 cardinal directions.
-* *Benefit:* Prevents "squashing" distortion when resizing rectangular images to a square (128x128) input.
 
-### 3. 📊 Top-3 Probabilistic Output
+### 3. Top-3 Probabilistic Output 📊
 Fine-grained classification (e.g., distinguishing *Pepper Bell Bacterial Spot* from *Potato Early Blight*) can be challenging due to morphological similarities.
-* Instead of a single "Black Box" answer, the system displays the **Top-3 most likely diagnoses** with their confidence percentages, providing an analytical tool for the user.
+* Instead of a single "Black Box" answer, the system displays the **Top-3 most likely diagnoses** with their confidence percentages.
 
-### 4. 🛡️ Background Suppression & Robustness
-* **The Problem:** Standard models force a prediction even if the user uploads a photo of a cat or a wall.
-* **The Solution:** A specific class for **"Background_without_leaves"** is integrated. If the model predicts this class or if the confidence score is below a certain threshold, the system triggers a **"No Leaf Detected"** warning.
+### 4. Background Suppression 🛡️
+* **The Logic:** A specific class for **"Background_without_leaves"** is integrated. If the model predicts this class or if the confidence score is below a certain threshold, the system triggers a **"No Leaf Detected"** warning.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture 🏗️
 
 The data pipeline follows a structured path from upload to diagnosis:
 
@@ -72,7 +68,7 @@ The data pipeline follows a structured path from upload to diagnosis:
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack 💻
 
 * **Core Logic:** Python 3.x
 * **Deep Learning:** TensorFlow, Keras
@@ -82,11 +78,45 @@ The data pipeline follows a structured path from upload to diagnosis:
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup ⚙️
 
 Follow these steps to run the project locally.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git](https://github.com/YOUR_USERNAME/YOUR_PROJECT_NAME.git)
-cd YOUR_PROJECT_NAME
+git clone [https://github.com/RumeysaHilal/plant-disease-classification.git](https://github.com/RumeysaHilal/plant-disease-classification.git)
+cd plant-disease-classification
+```
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the App
+```bash
+streamlit run app.py
+```
+
+## Usage Guide ▶️
+
+1.  **Launch the App:** Open the localhost link generated by Streamlit.
+2.  **Upload Image:** Use the sidebar to upload a clear image of a plant leaf.
+    * *Supported formats: JPG, PNG, JPEG.*
+3.  **Analysis:** Click the **"Hastalığı Analiz Et"** (Analyze) button.
+4.  **Review Results:**
+    * See the predicted disease class.
+    * Review the Top-3 probability chart.
+    * Expand the "Angle" section to see how the AI oriented the image.
+
+---
+
+## Model Details 🧠
+
+* **Architecture:** **MobileNetV2**. Chosen for its efficiency and low latency, making it ideal for web/mobile deployment.
+* **Input Shape:** `(128, 128, 3)`
+* **Training Strategy:** Transfer Learning. The feature extraction layers were frozen, and a custom classification head (Dense layers + Softmax) was trained on the plant dataset.
+* **Optimization:** The model uses `Categorical Crossentropy` loss and the `Adam` optimizer.
+* **Performance:** Optimized for CPU inference, making it suitable for edge devices or non-GPU servers.
+
+---
+*This project was developed for educational purposes.*
