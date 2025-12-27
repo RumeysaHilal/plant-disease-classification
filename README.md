@@ -78,6 +78,16 @@ The data pipeline follows a structured path from upload to diagnosis:
 
 ---
 
+## Model Details 🧠
+
+* **Architecture:** **MobileNetV2**. Chosen for its efficiency and low latency, making it ideal for web/mobile deployment.
+* **Input Shape:** `(128, 128, 3)`
+* **Training Strategy:** Transfer Learning. The feature extraction layers were frozen, and a custom classification head (Dense layers + Softmax) was trained on the plant dataset.
+* **Optimization:** The model uses `Categorical Crossentropy` loss and the `Adam` optimizer.
+* **Performance:** Optimized for CPU inference, making it suitable for edge devices or non-GPU servers.
+
+---
+
 ## Installation & Setup ⚙️
 
 Follow these steps to run the project locally.
@@ -109,14 +119,3 @@ streamlit run app.py
     * Expand the "Angle" section to see how the AI oriented the image.
 
 ---
-
-## Model Details 🧠
-
-* **Architecture:** **MobileNetV2**. Chosen for its efficiency and low latency, making it ideal for web/mobile deployment.
-* **Input Shape:** `(128, 128, 3)`
-* **Training Strategy:** Transfer Learning. The feature extraction layers were frozen, and a custom classification head (Dense layers + Softmax) was trained on the plant dataset.
-* **Optimization:** The model uses `Categorical Crossentropy` loss and the `Adam` optimizer.
-* **Performance:** Optimized for CPU inference, making it suitable for edge devices or non-GPU servers.
-
----
-*This project was developed for educational purposes.*
